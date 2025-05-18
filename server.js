@@ -11,7 +11,7 @@ dotenv.config();
 
 const app = express();
 
-// 🔹 Middleware
+// Middleware
 app.use(express.urlencoded({
 	extended: true
 }));
@@ -19,15 +19,15 @@ app.use(express.json({ strict: false }));
 app.use(cors());
 app.use(helmet());
 
-// 🔹 Koneksi Database
+//  Koneksi Database
 connectDB();
 
-// 🔹 Pastikan Cron Job History Berjalan ✅
+// Cron Job History
 require("./services/history");
 require("./services/notifikasi");
 require("./services/notificationListener");
 
-// 🔹 Import Routes
+// Routes
 const authRoutes = require("./routes/auth");
 const lupaPasswordRoutes = require("./routes/lupaPassword");
 const resetPasswordRoutes = require("./routes/resetPassword");

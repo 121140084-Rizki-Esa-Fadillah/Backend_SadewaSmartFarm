@@ -9,10 +9,10 @@ try {
             databaseURL: "https://app-sadewa-smartfarm-default-rtdb.asia-southeast1.firebasedatabase.app/",
         });
 
-        console.log("✅ Firebase Admin SDK initialized (FCM HTTP v1)");
+        console.log("Firebase Admin SDK initialized (FCM HTTP v1)");
     }
 } catch (error) {
-    console.error("❌ Error initializing Firebase Admin SDK:", error);
+    console.error("Error initializing Firebase Admin SDK:", error);
 }
 
 const db = admin.database();
