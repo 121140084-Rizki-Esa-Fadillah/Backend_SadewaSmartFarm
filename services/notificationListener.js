@@ -79,6 +79,8 @@ db.ref("Sadewa_SmartFarm/ponds").on("child_changed", async (snapshot) => {
       });
       const namePond = kolam ? kolam.namePond : pondId;
 
+      console.log(`Perubahan data untuk ${namePond} (Pond ID: ${pondId})`);
+
       // Notifikasi Perubahan Ambang Batas Sensor (threshold_update)
       if (pondData.device_config && pondData.device_config.thresholds) {
             const newThresholds = pondData.device_config.thresholds;
@@ -333,4 +335,4 @@ cron.schedule("*/15 * * * *", async () => {
 });
 
 
-console.log("Firebase notification listener aktif...");
+console.log("🔄 Firebase notification listener aktif...");
