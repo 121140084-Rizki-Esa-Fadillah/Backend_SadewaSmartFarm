@@ -89,8 +89,10 @@ const simpanHistory = async () => {
 				console.log(`Tidak dapat menyimpan laporan untuk ${pondId}: ${error.message}`);
 			}
 		}
+		for (const pondId in dailyHistoryBuffer) {
+			delete dailyHistoryBuffer[pondId][date];
+		}
 
-		delete dailyHistoryBuffer[date];
 	} catch (error) {
 		console.error("Gagal menyimpan laporan harian:", error.message);
 	}
