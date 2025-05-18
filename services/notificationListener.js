@@ -6,6 +6,7 @@ const {
 } = require("./notifikasi");
 const Kolam = require("../models/kolam");
 const Notification = require("../models/notifikasi"); 
+const cron = require("node-cron");
 
 // Fungsi untuk mencegah notifikasi duplikat dalam 5 menit terakhir
 const isDuplicateNotification = async (idPond, type) => {
@@ -224,10 +225,9 @@ db.ref("Sadewa_SmartFarm/ponds").on("child_changed", async (snapshot) => {
       }
 });
 
-const cron = require("node-cron");
 
-// Cek Feed Alert setiap 15 menit
-cron.schedule("*/15 * * * *", async () => {
+
+cron.schedule("*/30 * * * *", async () => {
       console.log("[CRON] Mengecek kondisi feed_alert...");
 
       const pondsSnapshot = await db.ref("Sadewa_SmartFarm/ponds").once("value");
@@ -261,7 +261,7 @@ cron.schedule("*/15 * * * *", async () => {
 });
 
 // Cek Water Quality setiap 1 menit
-cron.schedule("*/15 * * * *", async () => {
+cron.schedule("*/5 * * * *", async () => {
       console.log("[CRON] Mengecek kualitas air...");
 
       const pondsSnapshot = await db.ref("Sadewa_SmartFarm/ponds").once("value");

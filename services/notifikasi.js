@@ -3,6 +3,7 @@ const {
       messaging
 } = require("../config/firebaseConfig");
 const cron = require("node-cron");
+const { DateTime } = require("luxon");
 const Kolam = require("../models/kolam");
 
 // Kirim Push Notifikasi
@@ -99,12 +100,12 @@ const hapusNotifikasi = async () => {
 };
 
 // Penghapusan notifikasi
-cron.schedule("0 18 * * *", async () => {
+cron.schedule("0 20 * * *", async () => {
       console.log("Cron job: hapus notifikasi lama...");
       await hapusNotifikasi();
 }, {
       scheduled: true,
-      //timezone: "Asia/Jakarta"
+      timezone: "Asia/Jakarta"
 });
 
 module.exports = {
