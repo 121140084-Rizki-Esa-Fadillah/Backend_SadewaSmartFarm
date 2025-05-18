@@ -135,6 +135,13 @@ cron.schedule("0 20 * * *", async () => {
 	timezone: "Asia/Jakarta",
 });
 
+cron.schedule("*/2 * * * *", () => {
+	console.log("TEST: Cron simpanHistory dijalankan pada", DateTime.now().setZone("Asia/Jakarta").toISO());
+	console.log("Waktu sistem (UTC):", new Date().toISOString());
+	console.log("Waktu Jakarta:", DateTime.now().setZone("Asia/Jakarta").toISO());
+});
+
+
 module.exports = {
 	ambilHistoryByPond,
 	ambilHistoryById,
