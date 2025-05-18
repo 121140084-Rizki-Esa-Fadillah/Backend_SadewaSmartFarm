@@ -43,7 +43,7 @@ const thresholdRoutes = require("./routes/thresholds");
 const checkDataRouter = require("./routes/checkData");
 const emailCheckRoute = require('./routes/checkEmail');
 
-// 🔹 Routes
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/password", lupaPasswordRoutes);
 app.use("/api/password", resetPasswordRoutes);
@@ -59,11 +59,11 @@ app.use("/api/konfigurasi/thresholds", thresholdRoutes);
 app.use("/api/check", checkDataRouter);
 app.use('/api', emailCheckRoute);
 
-// 🔹 Jalankan Server
+// Jalankan Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, "0.0.0.0", () => {
 	console.log("====================================");
-	console.log(`🚀 Server berjalan di port ${PORT}`);
-	console.log("🔄 Cron Jobs untuk History & Notifikasi Aktif ✅");
+	console.log(`Server berjalan di port ${PORT}`);
+	console.log("Cron Jobs untuk History & Notifikasi Aktif ");
 	console.log("====================================");
 });
