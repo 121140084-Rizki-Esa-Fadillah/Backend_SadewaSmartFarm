@@ -121,10 +121,10 @@ cron.schedule("*/15 * * * *", async () => {
 	await collectDataFromFirebase();
 }, {
 	scheduled: true,
-	timezone: "Asia/Jakarta",
+	//timezone: "Asia/Jakarta",
 });
 
-cron.schedule("0 0 * * *", async () => {
+cron.schedule("0 17 * * *", async () => {
 	console.log("Menyimpan laporan harian dan menghapus riwayat lama...");
 	try {
 		await simpanHistory();
@@ -134,14 +134,14 @@ cron.schedule("0 0 * * *", async () => {
 	}
 }, {
 	scheduled: true,
-	timezone: "Asia/Jakarta",
+	//timezone: "Asia/Jakarta",
 });
 
 cron.schedule("*/2 * * * *", async () => {
   console.log("Simulasi cron jalan tiap 2 menit...");
 }, {
   scheduled: true,
-  timezone: "Asia/Jakarta"
+  //timezone: "Asia/Jakarta"
 });
 
 module.exports = {
