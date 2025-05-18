@@ -128,7 +128,7 @@ cron.schedule("*/15 * * * *", async () => {
 	timezone: "Asia/Jakarta",
 });
 
-cron.schedule("0 20 * * *", async () => {
+cron.schedule("0 0 * * *", async () => {
 	console.log("Menyimpan laporan harian dan menghapus riwayat lama...");
 	try {
 		await simpanHistory();
@@ -140,18 +140,6 @@ cron.schedule("0 20 * * *", async () => {
 	scheduled: true,
 	timezone: "Asia/Jakarta",
 });
-
-// Misalnya sekarang 03:10 WIB
-cron.schedule("15 3 * * *", async () => {
-	console.log("TEST CRON 03:15 WIB: Simpan & Hapus");
-	await simpanHistory();
-	await hapusHistory();
-}, {
-	scheduled: true,
-	timezone: "Asia/Jakarta"
-});
-
-
 
 module.exports = {
 	ambilHistoryByPond,

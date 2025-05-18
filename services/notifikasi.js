@@ -100,12 +100,21 @@ const hapusNotifikasi = async () => {
 };
 
 // Penghapusan notifikasi
-cron.schedule("0 20 * * *", async () => {
+cron.schedule("0 0 * * *", async () => {
       console.log("Cron job: hapus notifikasi lama...");
       await hapusNotifikasi();
 }, {
       scheduled: true,
       timezone: "Asia/Jakarta"
+});
+
+// Cron untuk testing: jalan di menit 25 jam 3 WIB setiap hari
+cron.schedule("25 3 * * *", async () => {
+  console.log("Cron job TEST hapus notifikasi lama dipanggil pada", DateTime.now().setZone("Asia/Jakarta").toISO());
+  await hapusNotifikasi();
+}, {
+  scheduled: true,
+  timezone: "Asia/Jakarta"
 });
 
 module.exports = {
