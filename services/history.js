@@ -1,6 +1,5 @@
-const {
-	db
-} = require("../config/firebaseConfig");
+const { DateTime } = require("luxon");
+const { db } = require("../config/firebaseConfig");
 const History = require("../models/history");
 const cron = require("node-cron");
 
@@ -37,9 +36,10 @@ const collectDataFromFirebase = async () => {
 			return;
 		}
 
-		const now = new Date();
-		const time = now.toTimeString().split(" ")[0];
-		const date = now.toISOString().split("T")[0];
+		// Pakai Luxon, set timezone ke Asia/Jakarta
+		const now = DateTime.now().setZone("Asia/Jakarta");
+		const time = now.toFormat("HH:mm:ss");
+		const date = now.toISODate(); // format YYYY-MM-DD
 
 		for (const pondId in pondsData) {
 			const pond = pondsData[pondId];
@@ -73,11 +73,12 @@ const collectDataFromFirebase = async () => {
 	}
 };
 
-
 const simpanHistory = async () => {
 	try {
 		console.log("Menyimpan laporan harian ke database...");
-		const date = new Date().toISOString().split("T")[0];
+
+		// Simpan juga dengan timezone Asia/Jakarta
+		const date = DateTime.now().setZone("Asia/Jakarta").toISODate();
 
 		for (const pondId in dailyHistoryBuffer) {
 			if (!dailyHistoryBuffer[pondId][date]) continue;
@@ -100,12 +101,12 @@ const simpanHistory = async () => {
 
 const hapusHistory = async () => {
 	try {
-		const now = new Date();
-		const oneMonthAgo = new Date(now.setMonth(now.getMonth() - 1));
+		const now = DateTime.now().setZone("Asia/Jakarta");
+		const oneMonthAgo = now.minus({ months: 1 });
 
-		console.log(`Menghapus riwayat sebelum: ${oneMonthAgo.toISOString()}`);
+		console.log(`Menghapus riwayat sebelum: ${oneMonthAgo.toISO()}`);
 
-		const result = await History.hapusHistory(oneMonthAgo);
+		const result = await History.hapusHistory(oneMonthAgo.toJSDate());
 		console.log(`Riwayat lama yang dihapus: ${result.deletedCount}`);
 	} catch (error) {
 		console.error("Gagal menghapus riwayat lama:", error.message);
@@ -118,10 +119,10 @@ cron.schedule("*/15 * * * *", async () => {
 	await collectDataFromFirebase();
 }, {
 	scheduled: true,
-	//timezone: "Asia/Jakarta",
+	timezone: "Asia/Jakarta",
 });
 
-cron.schedule("0 17 * * *", async () => {
+cron.schedule("0 18 * * *", async () => {
 	console.log("Menyimpan laporan harian dan menghapus riwayat lama...");
 	try {
 		await simpanHistory();
@@ -131,14 +132,7 @@ cron.schedule("0 17 * * *", async () => {
 	}
 }, {
 	scheduled: true,
-	//timezone: "Asia/Jakarta",
-});
-
-cron.schedule("*/2 * * * *", async () => {
-	console.log("Simulasi cron jalan tiap 2 menit...");
-}, {
-	scheduled: true,
-	//timezone: "Asia/Jakarta"
+	timezone: "Asia/Jakarta",
 });
 
 module.exports = {
