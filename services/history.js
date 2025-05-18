@@ -137,6 +137,13 @@ cron.schedule("0 0 * * *", async () => {
 	timezone: "Asia/Jakarta",
 });
 
+cron.schedule("*/2 * * * *", async () => {
+  console.log("Simulasi cron jalan tiap 2 menit...");
+}, {
+  scheduled: true,
+  timezone: "Asia/Jakarta"
+});
+
 module.exports = {
 	ambilHistoryByPond,
 	ambilHistoryById,
