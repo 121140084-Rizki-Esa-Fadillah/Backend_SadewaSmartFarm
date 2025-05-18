@@ -25,55 +25,52 @@ const ambilHistoryById = async (id) => {
 };
 
 const collectDataFromFirebase = async () => {
-  try {
-    console.log("Mengambil data monitoring dari Firebase...");
+	try {
+		console.log("Mengambil data monitoring dari Firebase...");
 
-    const ref = db.ref("Sadewa_SmartFarm/ponds");
-    const snapshot = await ref.once("value");
-    const pondsData = snapshot.val();
+		const ref = db.ref("Sadewa_SmartFarm/ponds");
+		const snapshot = await ref.once("value");
+		const pondsData = snapshot.val();
 
-    if (!pondsData) {
-      console.log("Tidak ada data kolam ditemukan.");
-      return;
-    }
+		if (!pondsData) {
+			console.log("Tidak ada data kolam ditemukan.");
+			return;
+		}
 
-    // Konversi waktu ke zona Asia/Jakarta
-    const jakartaDate = new Date().toLocaleString("en-US", { timeZone: "Asia/Jakarta" });
-    const dateObj = new Date(jakartaDate);
+		const now = new Date();
+		const time = now.toTimeString().split(" ")[0];
+		const date = now.toISOString().split("T")[0];
 
-    const time = dateObj.toTimeString().split(" ")[0]; // Format: HH:mm:ss
-    const date = dateObj.toISOString().split("T")[0];  // Format: YYYY-MM-DD
+		for (const pondId in pondsData) {
+			const pond = pondsData[pondId];
+			if (!pond.sensor_data) continue;
 
-    for (const pondId in pondsData) {
-      const pond = pondsData[pondId];
-      if (!pond.sensor_data) continue;
+			const {
+				temperature,
+				ph,
+				salinity,
+				turbidity,
+				rain_status
+			} = pond.sensor_data;
 
-      const {
-        temperature,
-        ph,
-        salinity,
-        turbidity,
-        rain_status
-      } = pond.sensor_data;
+			const historyData = {
+				time,
+				temperature,
+				ph,
+				salinity,
+				turbidity,
+				rain_status,
+			};
 
-      const historyData = {
-        time,
-        temperature,
-        ph,
-        salinity,
-        turbidity,
-        rain_status,
-      };
+			if (!dailyHistoryBuffer[pondId]) dailyHistoryBuffer[pondId] = {};
+			if (!dailyHistoryBuffer[pondId][date]) dailyHistoryBuffer[pondId][date] = [];
 
-      if (!dailyHistoryBuffer[pondId]) dailyHistoryBuffer[pondId] = {};
-      if (!dailyHistoryBuffer[pondId][date]) dailyHistoryBuffer[pondId][date] = [];
-
-      dailyHistoryBuffer[pondId][date].push(historyData);
-      console.log(`Data ditambahkan ke buffer untuk ${pondId} pada ${time}`);
-    }
-  } catch (error) {
-    console.error("Gagal mengambil data dari Firebase:", error.message);
-  }
+			dailyHistoryBuffer[pondId][date].push(historyData);
+			console.log(`Data ditambahkan ke buffer untuk ${pondId} pada ${time}`);
+		}
+	} catch (error) {
+		console.error("Gagal mengambil data dari Firebase:", error.message);
+	}
 };
 
 
@@ -138,10 +135,10 @@ cron.schedule("0 17 * * *", async () => {
 });
 
 cron.schedule("*/2 * * * *", async () => {
-  console.log("Simulasi cron jalan tiap 2 menit...");
+	console.log("Simulasi cron jalan tiap 2 menit...");
 }, {
-  scheduled: true,
-  //timezone: "Asia/Jakarta"
+	scheduled: true,
+	//timezone: "Asia/Jakarta"
 });
 
 module.exports = {
