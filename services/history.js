@@ -1,5 +1,9 @@
-const { DateTime } = require("luxon");
-const { db } = require("../config/firebaseConfig");
+const {
+	DateTime
+} = require("luxon");
+const {
+	db
+} = require("../config/firebaseConfig");
 const History = require("../models/history");
 const cron = require("node-cron");
 
@@ -102,7 +106,9 @@ const simpanHistory = async () => {
 const hapusHistory = async () => {
 	try {
 		const now = DateTime.now().setZone("Asia/Jakarta");
-		const oneMonthAgo = now.minus({ months: 1 });
+		const oneMonthAgo = now.minus({
+			months: 1
+		});
 
 		console.log(`Menghapus riwayat sebelum: ${oneMonthAgo.toISO()}`);
 
@@ -135,11 +141,16 @@ cron.schedule("0 20 * * *", async () => {
 	timezone: "Asia/Jakarta",
 });
 
-cron.schedule("*/2 * * * *", () => {
-	console.log("TEST: Cron simpanHistory dijalankan pada", DateTime.now().setZone("Asia/Jakarta").toISO());
-	console.log("Waktu sistem (UTC):", new Date().toISOString());
-	console.log("Waktu Jakarta:", DateTime.now().setZone("Asia/Jakarta").toISO());
+// Misalnya sekarang 03:10 WIB
+cron.schedule("15 3 * * *", async () => {
+	console.log("TEST CRON 03:15 WIB: Simpan & Hapus");
+	await simpanHistory();
+	await hapusHistory();
+}, {
+	scheduled: true,
+	timezone: "Asia/Jakarta"
 });
+
 
 
 module.exports = {
