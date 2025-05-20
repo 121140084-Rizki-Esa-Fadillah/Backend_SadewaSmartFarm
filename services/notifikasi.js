@@ -100,12 +100,12 @@ const hapusNotifikasi = async () => {
 };
 
 // Penghapusan notifikasi
-cron.schedule("0 0 * * *", async () => {
+cron.schedule("0 17 * * *", async () => {
       console.log("Cron job: hapus notifikasi lama...");
       await hapusNotifikasi();
 }, {
       scheduled: true,
-      timezone: "Asia/Jakarta"
+      //timezone: "Asia/Jakarta"
 });
 
 module.exports = {
